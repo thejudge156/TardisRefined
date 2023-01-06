@@ -23,7 +23,7 @@ public class DimensionControl implements IControl {
 
     private void setDimensions(MinecraftServer server) {
         if(dimensions.isEmpty()) {
-            dimensions.addAll(server.getWorldData().worldGenSettings().levels());
+            dimensions.addAll(server.levelKeys());
             ResourceKey<Level>[] array = new ResourceKey[dimensions.size()];
             dimensions.toArray(array);
             for (ResourceKey<Level> level : array) {

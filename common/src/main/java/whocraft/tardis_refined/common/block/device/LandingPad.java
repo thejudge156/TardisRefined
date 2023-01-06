@@ -69,12 +69,12 @@ public class LandingPad extends Block {
                                 cap.getControlManager().setTargetLocation(new TardisNavLocation(blockPos.above(), player.getDirection().getOpposite(), serverLevel));
                                 serverLevel.playSound(null, blockPos, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 1f, 1f);
                             } else {
-                                serverLevel.playSound(null, blockPos, SoundEvents.NOTE_BLOCK_BIT, SoundSource.BLOCKS, 100, (float)(0.1 + (serverLevel.getRandom().nextFloat() * 0.5)));
+                                serverLevel.playSound(null, blockPos, SoundEvents.NOTE_BLOCK_BIT.value(), SoundSource.BLOCKS, 100, (float)(0.1 + (serverLevel.getRandom().nextFloat() * 0.5)));
                             }
 
                         });
                     } else {
-                        serverLevel.playSound(null, blockPos, SoundEvents.NOTE_BLOCK_BIT, SoundSource.BLOCKS, 100, (float)(0.1 + (serverLevel.getRandom().nextFloat() * 0.25)));
+                        serverLevel.playSound(null, blockPos, SoundEvents.NOTE_BLOCK_BIT.value(), SoundSource.BLOCKS, 100, (float)(0.1 + (serverLevel.getRandom().nextFloat() * 0.25)));
                     }
                 }
             }

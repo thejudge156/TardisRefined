@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientHandshakePacketListenerImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -65,7 +66,7 @@ public class DimensionHandlerIP {
         ServerLevel world = server.levelKeys().contains(id) ? server.getLevel(id) : null;
         if (world != null) return world;
         BiFunction<MinecraftServer, ResourceKey<LevelStem>, LevelStem> dimensionFactory = DimensionHandler::formLevelStem;
-        final ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registry.LEVEL_STEM_REGISTRY, id.location());
+        final ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registries.LEVEL_STEM, id.location());
         DimensionAPI.addDimensionDynamically(id.location(), dimensionFactory.apply(server, dimensionKey));
         DimensionAPI.saveDimensionConfiguration(id);
         world = server.getLevel(id);
@@ -185,11 +186,11 @@ public class DimensionHandlerIP {
 
         CompoundTag tag = exteriorPortal.writePortalDataToNbt();
         tag.putBoolean("adjustPositionAfterTeleport", false);
-        exteriorPortal.readPortalDataFromNbt(tag);
+        exteriorPortal.updatePortalFromNbt(tag);
 
         tag = interiorPortal.writePortalDataToNbt();
         tag.putBoolean("adjustPositionAfterTeleport", false);
-        interiorPortal.readPortalDataFromNbt(tag);
+        interiorPortal.updatePortalFromNbt(tag);
 
         exteriorPortal.level.addFreshEntity(exteriorPortal);
         interiorPortal.level.addFreshEntity(interiorPortal);
@@ -224,7 +225,7 @@ public class DimensionHandlerIP {
         newPortal.axisW = new Vec3(1, 0, 0);
         newPortal.axisH = new Vec3(0, 1, 0);
 
-        PortalManipulation.rotatePortalBody(newPortal, quat.toMcQuaternion());
+        PortalManipulation.rotatePortalBody(newPortal, quat);
 
         return newPortal;
     }
@@ -241,7 +242,7 @@ public class DimensionHandlerIP {
                 1, // width
                 2.175 // height
         );
-        PortalManipulation.rotatePortalBody(portal, quat.toMcQuaternion());
+        PortalManipulation.rotatePortalBody(portal, quat);
 
         return portal;
     }
