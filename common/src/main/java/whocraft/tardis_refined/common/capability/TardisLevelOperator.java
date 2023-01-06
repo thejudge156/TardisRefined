@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
 import whocraft.tardis_refined.api.event.TardisEvents;
+import whocraft.tardis_refined.common.dimension.DimensionHandler;
 import whocraft.tardis_refined.constants.NbtConstants;
 import whocraft.tardis_refined.client.TardisClientData;
 import whocraft.tardis_refined.common.blockentity.door.ITardisInternalDoor;
@@ -182,6 +183,11 @@ public class TardisLevelOperator {
         if (!this.internalDoor.isOpen()) {
             return;
         }
+        if(getExteriorManager().getCurrentTheme() != null) {
+            if(!getExteriorManager().getCurrentTheme().equals(ShellTheme.BRIEFCASE) && DimensionHandler.hasIP()) {
+                return;
+            }
+        }
 
         if (this.exteriorManager != null) {
             if (this.exteriorManager.getLastKnownLocation() != null) {
@@ -209,12 +215,19 @@ public class TardisLevelOperator {
         if (getInternalDoor() != null) {
             getInternalDoor().setClosed(closeDoor);
         }
+
+        if(closeDoor) {
+            TardisEvents.DOOR_CLOSED_EVENT.invoker().onDoorClosed(this);
+        } else {
+            TardisEvents.DOOR_OPENED_EVENT.invoker().onDoorOpen(this);
+        }
     }
 
     public void setShellTheme(ShellTheme theme) {
         getExteriorManager().setShellTheme(theme);
         getInteriorManager().setShellTheme(theme);
         this.getControlManager().setCurrentExteriorTheme(theme);
+        TardisEvents.SHELL_CHANGE_EVENT.invoker().onShellChange(this, theme);
     }
 
     /**

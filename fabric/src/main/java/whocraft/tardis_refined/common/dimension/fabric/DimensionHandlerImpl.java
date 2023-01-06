@@ -103,6 +103,11 @@ public class DimensionHandlerImpl {
     }
 
     public static ServerLevel createDimension(Level level, ResourceKey<Level> id) {
+
+        if(DimensionHandler.hasIP()) {
+            return DimensionHandlerIP.createDimension(level, id);
+        }
+
         BiFunction<MinecraftServer, ResourceKey<LevelStem>, LevelStem> dimensionFactory = DimensionHandler::formLevelStem;
 
         MinecraftServer server = getServer();
