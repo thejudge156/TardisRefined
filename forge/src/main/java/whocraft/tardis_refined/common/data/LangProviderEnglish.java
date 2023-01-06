@@ -43,6 +43,7 @@ public class LangProviderEnglish extends LanguageProvider {
         add(BlockRegistry.ROOT_SHELL_DOOR.get(), "Root Door");
         add(BlockRegistry.AIR_LOCK_GENERATION_BLOCK.get(), "Air Lock Generator");
         add(BlockRegistry.CONSOLE_CONFIGURATION_BLOCK.get(), "Console Configurator");
+        add(BlockRegistry.LANDING_PAD.get(), "Landing Pad");
 
         /*Items*/
         add(ItemRegistry.KEY.get(), "Tardis Key");
@@ -67,6 +68,7 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.MSG_EXTERIOR_COOLDOWN, "You must wait %s seconds");
         add(ModMessages.MSG_KEY_BOUND, "Key Bound to %s");
         add(ModMessages.MSG_DIMENSION_SELECT, "Dimension set to ");
+        add(ModMessages.MSG_KEY_CYCLED, "Main: %s");
 
         /*Creative Tab*/
         add("itemGroup.tardis_refined.tardis_refined", "Tardis Refined");
@@ -96,6 +98,7 @@ public class LangProviderEnglish extends LanguageProvider {
         addShell(ShellTheme.BRIEFCASE, "Briefcase");
         addShell(ShellTheme.GROENING, "Greoning");
         addShell(ShellTheme.VENDING, "Vending Machine");
+        addShell(ShellTheme.BIG_BEN, "Big Ben");
 
         /*Desktop Themes*/
         addDesktopTheme(TardisDesktops.CORAL_THEME, "Coral");

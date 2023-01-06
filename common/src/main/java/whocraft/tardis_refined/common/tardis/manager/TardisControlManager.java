@@ -38,6 +38,10 @@ public class TardisControlManager {
     private int[] coordinateIncrements = new int[]{1, 10, 100, 1000};
     private int cordIncrementIndex = 0;
 
+    private boolean autoLand = false;
+    public void setAutoLand(boolean autoLand) {this.autoLand = autoLand;}
+    public boolean isAutoLandSet() {return this.autoLand;}
+
     private ShellTheme currentExteriorTheme;
 
     public ShellTheme getCurrentExteriorTheme() {
@@ -53,6 +57,7 @@ public class TardisControlManager {
     }
 
     public void loadData(CompoundTag tag) {
+        this.autoLand = tag.getBoolean(NbtConstants.CONTROL_AUTOLAND);
         this.isInFlight = tag.getBoolean(NbtConstants.CONTROL_IS_IN_FLIGHT);
         this.targetLocation = NbtConstants.getTardisNavLocation(tag, "ctrl_target", operator);
 
@@ -60,18 +65,16 @@ public class TardisControlManager {
             this.currentExteriorTheme = ShellTheme.findOr(tag.getString(NbtConstants.CONTROL_CURRENT_EXT), ShellTheme.FACTORY);
         }
 
-
-
         if (this.targetLocation == null) {
             this.targetLocation = new TardisNavLocation(new BlockPos(0, 0, 0), Direction.NORTH, operator.getLevel().getServer().getLevel(Level.OVERWORLD));
         }
 
         this.cordIncrementIndex = tag.getInt(NbtConstants.CONTROL_INCREMENT_INDEX);
-
     }
 
     public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean(NbtConstants.CONTROL_IS_IN_FLIGHT, this.isInFlight);
+        tag.putBoolean(NbtConstants.CONTROL_AUTOLAND, this.autoLand);
         if (this.currentExteriorTheme != null) {
             tag.putString(NbtConstants.CONTROL_CURRENT_EXT, this.currentExteriorTheme.getSerializedName());
         }
@@ -85,19 +88,21 @@ public class TardisControlManager {
     }
 
     public void tick(Level level) {
-
-        if(targetLocation == null){
+        if (targetLocation == null) {
             var location = this.operator.getExteriorManager().getLastKnownLocation();
             if (targetLocation != null) {
                 this.targetLocation = location;
             } else {
                 this.targetLocation = new TardisNavLocation(new BlockPos(0, 100, 0), Direction.NORTH, Platform.getServer().overworld());
             }
-
         }
 
         if (isInFlight) {
             ticksInFlight++;
+
+            if ( ticksInFlight > (20 * 10) && autoLand) {
+                this.endFlight();
+            }
 
             if (ticksTakingOff > 0) {
                 ticksTakingOff++;
@@ -235,8 +240,12 @@ public class TardisControlManager {
         return null;
     }
 
-    public void beginFlight() {
-        if (isInFlight || ticksTakingOff > 0) {return;}
+    public boolean beginFlight(boolean autoLand) {
+        if (isInFlight || ticksTakingOff > 0) {
+            return false;
+        }
+
+        this.autoLand = autoLand;
 
         operator.setDoorClosed(true);
         operator.getLevel().playSound(null, operator.getInternalDoor().getDoorPosition(), SoundRegistry.TARDIS_TAKEOFF.get(), SoundSource.AMBIENT, 1000f, 1f);
@@ -245,7 +254,7 @@ public class TardisControlManager {
         this.ticksInFlight = 0;
         this.ticksTakingOff = 1;
         this.operator.getExteriorManager().setIsTakingOff(true);
-
+        return true;
     }
 
     public void endFlight() {
@@ -287,6 +296,7 @@ public class TardisControlManager {
     public void onFlightEnd() {
         this.isInFlight = false;
         this.ticksTakingOff = 0;
+        this.autoLand = false;
         TardisNavLocation lastKnown = operator.getControlManager().getTargetLocation();
         TardisEvents.LAND.invoker().onLand(operator, lastKnown.level, lastKnown.position);
     }
@@ -306,6 +316,7 @@ public class TardisControlManager {
     public TardisNavLocation getTargetLocation() {
         return this.targetLocation;
     }
+
     public void setTargetLocation(TardisNavLocation targetLocation) {
         this.targetLocation = targetLocation;
     }
