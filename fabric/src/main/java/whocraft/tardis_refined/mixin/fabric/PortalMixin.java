@@ -1,10 +1,6 @@
 package whocraft.tardis_refined.mixin.fabric;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +38,6 @@ public abstract class PortalMixin implements TARDISPortalData {
                 for (Portal portal : DimensionHandlerIP.tardisToPortalsMap.get(tardisID)) {
                     if (portal == null) {
                         thisPortal.kill();
-                        break;
                     }
                 }
             }
