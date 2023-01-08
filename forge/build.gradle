@@ -47,7 +47,6 @@ dependencies {
     modCompileOnly "curse.maven:configured-457570:${configured_version}"
     modCompileOnly "curse.maven:jei-238222:${jei_version}"
 
-
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 }

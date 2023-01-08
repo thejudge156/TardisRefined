@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.joml.Matrix4f;
+import whocraft.tardis_refined.TRConfig;
 import whocraft.tardis_refined.common.entity.ControlEntity;
 
 public class ControlEntityRenderer extends NoopRenderer<ControlEntity> {
@@ -20,14 +21,12 @@ public class ControlEntityRenderer extends NoopRenderer<ControlEntity> {
 
     @Override
     protected boolean shouldShowName(ControlEntity entity) {
-        return (Minecraft.renderNames() && this.entityRenderDispatcher.crosshairPickEntity == entity);
+        return (TRConfig.CLIENT.CONTROL_NAMES.get() && Minecraft.renderNames() && this.entityRenderDispatcher.crosshairPickEntity == entity);
     }
 
 
     @Override
     protected void renderNameTag(ControlEntity entity, Component component, PoseStack poseStack, MultiBufferSource multiBufferSource, int textRenderingLayer) {
-
-
         MutableComponent textComponent = Component.literal(component.getString());
         textComponent.withStyle(style -> style
                 .applyFormats(ChatFormatting.BOLD, ChatFormatting.YELLOW)
