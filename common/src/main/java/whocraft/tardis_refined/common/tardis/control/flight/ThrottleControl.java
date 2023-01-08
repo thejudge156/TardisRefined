@@ -1,7 +1,6 @@
 package whocraft.tardis_refined.common.tardis.control.flight;
 
 import net.minecraft.world.entity.player.Player;
-import whocraft.tardis_refined.common.block.door.GlobalDoorBlock;
 import whocraft.tardis_refined.common.capability.TardisLevelOperator;
 import whocraft.tardis_refined.common.entity.ControlEntity;
 import whocraft.tardis_refined.common.tardis.control.IControl;

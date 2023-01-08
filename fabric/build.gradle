@@ -59,6 +59,7 @@ dependencies {
     // Forge Config API Port
     modApi "net.minecraftforge:forgeconfigapiport-fabric:${rootProject.forge_config_api_port_version}"
     include "net.minecraftforge:forgeconfigapiport-fabric:${rootProject.forge_config_api_port_version}"
+
     modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:v2.4.3-mc1.19.3'){
         exclude(group: "net.fabricmc.fabric-api")
         transitive(false)
